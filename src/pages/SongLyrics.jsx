@@ -32,7 +32,7 @@ const SongLyrics = () => {
           onClick={() => navigate("/")}
           className="mb-5 px-5 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-md"
         >
-          ← Back to Home
+          ⬅️ Back 
         </button>
 
         <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8 overflow-y-auto">
@@ -49,7 +49,7 @@ const SongLyrics = () => {
           {/* Pallavi Section */}
           <div className="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl p-4 sm:p-6 mb-4 shadow-inner">
             <h3 className="text-xl font-semibold text-purple-700 mb-2 text-center">
-              పల్లవి (Pallavi)
+              పల్లవి 
             </h3>
             <p className="text-base sm:text-lg leading-relaxed text-gray-800 whitespace-pre-line text-center telugu-text">
               {song.lyrics.pallavi.trim()}
