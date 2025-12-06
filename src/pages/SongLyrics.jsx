@@ -5,7 +5,7 @@ import { songs } from "../data/songs";
 const SongLyrics = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const song = songs.find((s) => s.id === parseInt(id));
+  const song = songs.find((s) => s.id === parseInt(id, 10));
 
   if (!song) {
     return (
@@ -23,6 +23,17 @@ const SongLyrics = () => {
       </div>
     );
   }
+
+  // collect all charanamN keys dynamically and sort them numerically
+  const charanamKeys = Object.keys(song.lyrics || {})
+    .filter((k) => /^charanam\d+$/i.test(k))
+    .sort((a, b) => {
+      const na = parseInt(a.replace(/\D/g, ""), 10) || 0;
+      const nb = parseInt(b.replace(/\D/g, ""), 10) || 0;
+      return na - nb;
+    });
+
+  const charanams = charanamKeys.map((k) => song.lyrics[k]).filter(Boolean);
 
   return (
     <div className="min-h-screen 
@@ -63,32 +74,34 @@ const SongLyrics = () => {
           </div>
 
           {/* PALLAVI – NAVY THEME */}
-          <div className="rounded-xl mb-6 overflow-hidden">
-            <div
-              className="px-5 py-4"
-              style={{
-                background: "linear-gradient(135deg, #081120 0%, #10264d 60%)",
-                boxShadow:
-                  "0 8px 20px rgba(8,17,32,0.3), inset 0 -6px 20px rgba(0,0,0,0.15)",
-                borderRadius: 12,
-              }}
-            >
-              <h3 className="text-lg sm:text-xl font-bold text-white text-center mb-3">
-                పల్లవి
-              </h3>
-
-              <p
-                className="telugu-text text-base sm:text-lg leading-relaxed text-white whitespace-pre-line text-left"
-                style={{ paddingLeft: 28, paddingRight: 24, lineHeight: 1.25 }}
+          {song.lyrics?.pallavi && (
+            <div className="rounded-xl mb-6 overflow-hidden">
+              <div
+                className="px-5 py-4"
+                style={{
+                  background: "linear-gradient(135deg, #081120 0%, #10264d 60%)",
+                  boxShadow:
+                    "0 8px 20px rgba(8,17,32,0.3), inset 0 -6px 20px rgba(0,0,0,0.15)",
+                  borderRadius: 12,
+                }}
               >
-                {song.lyrics.pallavi.trim()}
-              </p>
-            </div>
-          </div>
+                <h3 className="text-lg sm:text-xl font-bold text-white text-center mb-3">
+                  పల్లవి
+                </h3>
 
-          {/* CHARANAMS — DARK PINK / ROSE THEME (WHITE TEXT) */}
+                <p
+                  className="telugu-text text-base sm:text-lg leading-relaxed text-white whitespace-pre-line text-left"
+                  style={{ paddingLeft: 28, paddingRight: 24, lineHeight: 1.25 }}
+                >
+                  {song.lyrics.pallavi.trim()}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* CHARANAMS — dynamic rendering (keeps your dark pink style) */}
           <div className="space-y-5">
-            {[song.lyrics.charanam1, song.lyrics.charanam2].map((charanam, index) => (
+            {charanams.map((charanam, index) => (
               <div
                 key={index}
                 className="rounded-xl p-4 sm:p-6 relative overflow-hidden transition-transform hover:-translate-y-0.5"
